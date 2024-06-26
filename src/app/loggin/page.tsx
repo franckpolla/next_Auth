@@ -1,17 +1,5 @@
 "use client";
-import React from 'react'
-
-const Loggin = () => {
-  return (
-    <div className=' p-8'>
-        <SignupFormDemo />
-    </div>
-  )
-}
-
-export default Loggin
-
-
+import React from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import cn from "../utils/cn";
@@ -20,39 +8,50 @@ import {
   IconBrandGoogle,
   IconBrandOnlyfans,
 } from "@tabler/icons-react";
+import { login } from '@/action';
 
 export function SignupFormDemo() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+    // form const is used  to collect the data from the form, every tim ethe form is updated
+    const form = new FormData(e.currentTarget);
+    const formUsername = form.get("firstname") as string;
+    const formLastname = form.get("lastname") as string;
+    const formPassword = form.get("password");
+    // here we are hashing the password 
+    const formEmail = form.get("email");
+    console.log({formUsername, formLastname, formPassword, formEmail})
+    // here we are sending the data to the server
+    const result = await login(form)
+    console.log(result)
   };
   return (
     <div className=" max-w-md w-full mx-auto rounded-2xl md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
-        Welcome to franck.dev
+        Sign up
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        Login to see what we propose
+        sign up to see what we propose
       </p>
 
-      <form className="my-8" onSubmit={handleSubmit}>
+      <form className="my-8" onSubmit={handleSubmit}  action={login} method='post'>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
             <Label htmlFor="firstname">First name</Label>
-            <Input id="firstname" placeholder="Tyler" type="text" />
+            <Input id="firstname" required name='firstname' placeholder="Tyler" type="text" />
           </LabelInputContainer>
           <LabelInputContainer>
             <Label htmlFor="lastname">Last name</Label>
-            <Input id="lastname" placeholder="Durden" type="text" />
+            <Input id="lastname" required name="lastname" placeholder="Durden" type="text" />
           </LabelInputContainer>
         </div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
-          <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
+          <Input id="email" required name='email' placeholder="projectmayhem@fc.com" type="email" />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" placeholder="••••••••" type="password" />
+          <Input id="password" required name="password" placeholder="••••••••" type="password" />
         </LabelInputContainer>
 
         <button
@@ -125,3 +124,16 @@ export const LabelInputContainer = ({
   );
 };
  
+
+
+
+
+const Loggin = () => {
+  return (
+    <div className=' p-8'>
+        <SignupFormDemo />
+    </div>
+  )
+}
+
+export default Loggin

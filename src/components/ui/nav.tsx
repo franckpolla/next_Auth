@@ -1,7 +1,10 @@
 import React from "react";
 import Link from "next/link";
+import { getSessions } from "@/action";
 
-const NavbarDemo = () => {
+const NavbarDemo = async () => {
+   const session= await getSessions();
+  console.log(session)
   return (
     <nav className="flex justify-center items-center pt-8 " >
       <ul className="flex flex-row justify-between items-center  ">
